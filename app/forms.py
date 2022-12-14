@@ -1,17 +1,16 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
-class NewUserForm(UserCreationForm):
-    email = forms.EmailField(required=True)
 
-    class Meta:
-        model = User
-        fields = ("username", "email", "password1", "password2")
+class OrderForm(forms.Form):
+    price = forms.FloatField(label='Price ($)')
+    quantity = forms.FloatField(label='Quantity')
 
-    def save(self, commit=True):
-        user = super(NewUserForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
-        if commit:
-            user.save()
-        return user
+    def clean(self):
+        cleanedData = super().clean()
+        price = self.cleaned_data.get('price')
+        quantity = self.cleaned_data.get('quantity')
+        if price < 0:
+            raise forms.ValidationError('')  # display messages.error instead
+        if quantity < 0:
+            raise forms.ValidationError('')  # display messages.error instead
+        return cleanedData
