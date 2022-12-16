@@ -1,0 +1,92 @@
+body{
+    background-color: #181818;
+    color: white;
+}
+
+body section{
+    display: flex;
+    justify-content: center;
+}
+
+.chartDom{
+    display: grid;
+    grid-template-columns: 2fr 3fr 2fr;
+    align-items: center;
+    height: 650px;
+    overflow: hidden;
+    max-width: 2000px;
+}
+
+.chart{
+    margin: 0 50px;
+}
+
+.dom{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 32px;
+    width: 300px;
+    font-size: 15px;
+    overflow: hidden;
+}
+
+.sell{
+    border: 1px solid red;
+}
+
+.buy{
+    border: 1px solid green;
+}
+
+.value p {
+    margin: 5px;
+}
+
+.actual{
+    color: red;
+}
+
+
+
+
+
+.ordersGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    margin-top: 32px;
+    height: 400px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.order{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid white;
+    padding: 10px;
+}
+
+.order div{
+    display: flex;
+    justify-content: center;
+}
+
+.order form{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.order form input{
+    margin: 10px 0;
+    padding: 5px;
+}
+
+.order h3{
+    margin: 0;
+}
+

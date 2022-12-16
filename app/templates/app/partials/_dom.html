@@ -1,0 +1,29 @@
+    
+    
+    {% for item in domSellList %}
+        {% if item.quantity > 0 %}
+            <div class="value sell">
+                <p style="margin-left: calc(5px + ((250/{{maxQuantity}}*1px) * {{item.quantity}}) );">{{item.value|stringformat:".0f"}}</p>
+            </div>
+        {% else %}
+        <div class="value sell">
+            <p style="margin-left: 5px;">{{item.value|stringformat:".0f"}}</p>
+        </div>
+        {% endif %}
+    {% endfor %}
+    
+    <div class="actual value">
+        <p>{{currency|stringformat:".0f"}}</p>
+    </div>
+    
+    {% for item in domBuyList %}
+        {% if item.quantity > 0 %}
+            <div class="value buy">
+                <p style="margin-left: calc(5px + ((250/{{maxQuantity}}*1px) * {{item.quantity}}) );">{{item.value|stringformat:".0f"}}</p>
+            </div>
+        {% else %}
+            <div class="value buy">
+                <p style="margin-left: 5px * {{item.quantity}}) );">{{item.value|stringformat:".0f"}}</p>
+            </div>
+        {% endif %}
+    {% endfor %}

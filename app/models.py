@@ -1,6 +1,12 @@
-from djongo.models.fields import ObjectIdField, Field
+from djongo.models.fields import ObjectIdField
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
+class Profile(models.Model):
+    _id = ObjectIdField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # TODO oggetto "profitto"
 
 class Wallet(models.Model):
     _id = ObjectIdField()
@@ -16,10 +22,10 @@ class Wallet(models.Model):
 
 class Order(models.Model):
     _id = ObjectIdField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=5)
-    type = models.CharField(max_length=4)
-    price = models.FloatField()
+    type = models.CharField(max_length=9)
+    price = models.FloatField(default=None)
     quantity = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
