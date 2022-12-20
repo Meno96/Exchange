@@ -1,12 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Register</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Sign Up</h1>
+<section class="centerScreenSection">
+    <div >
+        <div >
+            <form action="#" method="post" class="cardCenter">
+                {% csrf_token %}
+                {{form}}
+                <div >
+                    <label >
+                        <input type="checkbox" class="checkbox" required="">
+                        <span>I agree to the Terms and Conditions</span>
+                    </label>
+                    <div class="clear"> </div>
+                </div>
+                <input type="submit" value="SIGN UP">
+            </form>
+            
+            {% for message in messages %}
+                <p id="messages">{{message}}</p>
+            {% endfor %}
+
+            <p> Already have an account? <a href="{% url 'user:login' %}" style="color: #ff9416;"> Sign in!</a></p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

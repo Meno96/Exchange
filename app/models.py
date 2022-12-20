@@ -3,18 +3,21 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
+# Classe che attribuisce l'IP e la data di accesso
+class IpAddress(models.Model):
+    pubDate = models.DateTimeField('date published')
+    ipAddress = models.GenericIPAddressField()
+
 class Profile(models.Model):
     _id = ObjectIdField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # TODO oggetto "profitto"
 
 class Wallet(models.Model):
     _id = ObjectIdField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     btcWallet = models.FloatField(default=0)
     usdWallet = models.FloatField(default=0)
-    btcBalance = models.FloatField(default=0)
-    usdBalance = models.FloatField(default=0)
+    startValue = models.FloatField(default=0)
 
     def __str__(self):
         text = f"Wallet n. {self._id}. User owner: {self.user}"

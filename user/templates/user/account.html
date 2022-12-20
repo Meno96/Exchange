@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% block _navbar %}
+{% include "partials/_navbar.html" %}
+{% endblock _navbar %}
+
+<section class="sectionNav">
+    <div class="accountPageContainer">
+        <h1>Account Dashboard</h1>
+        <div class="card">
+
+            <div class="profilePic">
+                <label class="-label" for="file">
+                    <span class="glyphicon glyphicon-camera"></span>
+                    <span>Change Image</span>
+                </label>
+                <input id="file" type="file" onchange="loadFile(event)" />
+                <img src="/static/img/small-profile.jpeg" id="output" width="200" />
+            </div>
+
+            <div class="info">
+                <h2>Hello {{username}},</h2>
+                {% if delta >= 0 %}
+                <h3>The value of your portfolio compared to the creation date increased by {{delta|stringformat:".2f"}}$</h3>
+                {% else %}
+                <p>The value of your portfolio compared to the creation date decreased by {{delta|stringformat:".2f"}}$ </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var loadFile = function (event) {
+        var image = document.getElementById("output");
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+</script>
+
+{% endblock %}

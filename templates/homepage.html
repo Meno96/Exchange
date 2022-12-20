@@ -1,7 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>Homepage</h1>
-    <a href="{% url 'app:order' user.id %}">Order</a>
+{% block _navbar %}
+{% include "partials/_navbar.html" %}
+{% endblock _navbar %}
+
+{% load static %}
+
+<section class="sectionNav">
+    {% if checkIp == True %}
+        <p style="color: red;">Your actual ip address is different from the last login. We suggest you to change password.</p>
+    {% endif %}
+    <div class="homeContainer">
+        <div class="cardHome">
+            <div class="logo">
+                <img src="static/img/logo.png" alt="" width="100px">
+                <h1 style="margin: 0;">Bitcoin</h1>
+            </div>
+            <h3>Price: <strong>{{currency|stringformat:".2f"}} $</strong>
+                <a href="https://coinmarketcap.com" class="link-primary" target="_blank">CoinMarketCap</a>
+            </h3><br>
+            <p>
+                <strong>What is?</strong>
+                Bitcoin is a cryptocurrency, a digital asset designed to work as a medium of exchange that uses cryptography
+                to control its creation and management, rather than relying on central authorities.
+            </p>
+            <a href="https://en.wikipedia.org/wiki/History_of_bitcoin" class="btn btn-primary" id="button-primary"
+                target="_blank">Read more...</a>
+        </div>
+    </div>
+</section>
+
+
 
 {% endblock %}

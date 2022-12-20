@@ -1,29 +1,41 @@
     
     
     {% for item in domSellList %}
-        {% if item.quantity > 0 %}
-            <div class="value sell">
-                <p style="margin-left: calc(5px + ((250/{{maxQuantity}}*1px) * {{item.quantity}}) );">{{item.value|stringformat:".0f"}}</p>
+
+        {% if item.quantity >= item.calc and maxQuantity > 0.00 %}
+            <div class="value sell" style="width: calc(98% * ({{item.quantity}}/{{maxQuantity}})); min-width: 50px">
+                <div class="pContainer" >
+                    <p>{{item.quantity|stringformat:".2f"}}</p>
+                    <h4>{{item.value|stringformat:".0f"}}</h4>
+                </div>
             </div>
         {% else %}
         <div class="value sell">
-            <p style="margin-left: 5px;">{{item.value|stringformat:".0f"}}</p>
+            <div class="pContainer" style="width: 50px;">
+                <h4>{{item.value|stringformat:".0f"}}</h4>
+            </div>
         </div>
         {% endif %}
+
     {% endfor %}
     
     <div class="actual value">
-        <p>{{currency|stringformat:".0f"}}</p>
+        <h4>{{currency|stringformat:".0f"}}</h4>
     </div>
     
     {% for item in domBuyList %}
-        {% if item.quantity > 0 %}
-            <div class="value buy">
-                <p style="margin-left: calc(5px + ((250/{{maxQuantity}}*1px) * {{item.quantity}}) );">{{item.value|stringformat:".0f"}}</p>
+        {% if item.quantity >= item.calc and maxQuantity > 0.00 %}
+            <div class="value buy" style="width: calc(98% * ({{item.quantity}}/{{maxQuantity}})); min-width: 50px">
+                <div class="pContainer">
+                    <p>{{item.quantity|stringformat:".2f"}}</p>
+                    <h4>{{item.value|stringformat:".0f"}}</h4>
+                </div>
             </div>
         {% else %}
-            <div class="value buy">
-                <p style="margin-left: 5px * {{item.quantity}}) );">{{item.value|stringformat:".0f"}}</p>
+            <div class="value buy" style="width: 50px;">
+                <div class="pContainer">
+                    <h4>{{item.value|stringformat:".0f"}}</h4>
+                </div>
             </div>
         {% endif %}
     {% endfor %}

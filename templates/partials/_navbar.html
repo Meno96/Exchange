@@ -1,0 +1,35 @@
+<nav class="navbar">
+
+    <div class="navElem">
+        <a class="logo" href="{% url 'app:homepage' %}">
+            {% load static %}
+            <img src="{% static 'img/logo.png' %}" alt="" width="40px" class="img">
+            BTC Exchange
+        </a>
+    </div>
+
+    <div class="navElem">
+        <a href="{% url 'app:homepage' %}">
+            <span class="central" > Home </span>
+        </a>
+        <a href="{% url 'app:order' user.id %}">
+            <span class="central" > Exchange </span>
+        </a>
+
+        <a href="{% url 'user:account' user.id %}">
+            <span class="central" > Account </span>
+        </a>
+    </div>
+
+    <!-- Sezione a destra della navbar che mostra username e permette il logout -->
+    <div class="navElem">
+        <span class="hello-msg">
+            <span>Hello, </span>
+            <a href="{% url 'user:account' user.id %}">
+                <span> {{request.user}}</span>
+            </a>
+        </span>
+        <span style="font-weight: 100; font-style: italic;"> <a href="{% url 'user:logout' %}">Logout</a></span>
+    </div>
+
+</nav>
