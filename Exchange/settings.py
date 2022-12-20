@@ -24,9 +24,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'j@-(x!6-@ixju6*%3*6pd7se%-3kq$+28&b4zrj89__y2u&(bj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['menobtc.herokuapp.com']
 
 
 # Application definition
