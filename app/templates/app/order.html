@@ -1,62 +1,74 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>Order</h1>
+{% block _navbar %}
+{% include "partials/_navbar.html" %}
+{% endblock _navbar %}
+    <section class="sectionNav">
+        <h1>Exchange</h1>
+    </section>
 
     <section>
-        <div class="chartDom">
-            <div class="ordersGrid">
-                <div class="order">
-                    <div>
-                        <h3>Buy Limit</h3>
+        <div>
+            <div class="chartDom">
+                <div class="ordersGrid">
+                    <div class="order">
+                        <div>
+                            <h3>Buy Limit</h3>
+                        </div>
+                        <form action="." method="POST" >
+                            <input type="text" name="price" placeholder="Price" required="">
+                            <input type="text" name="quantity" placeholder="Quantity" required="">
+                            <input type="submit" name="buyLimit"/>
+                        </form>
                     </div>
-                    <form action="." method="POST" >
-                        <input type="text" name="price" placeholder="Price" required="">
-                        <input type="text" name="quantity" placeholder="Quantity" required="">
-                        <input type="submit" name="buyLimit"/>
-                    </form>
-                </div>
-                <div class="order">
-                    <div> 
-                        <h3>Buy Market</h3>
+                    <div class="order">
+                        <div> 
+                            <h3>Buy Market</h3>
+                        </div>
+                        <form action="." method="POST" >
+                            <input type="text" name="quantity" placeholder="Quantity" required="">
+                            <input type="submit" name="buy"/>
+                        </form>
                     </div>
-                    <form action="." method="POST" >
-                        <input type="text" name="quantity" placeholder="Quantity" required="">
-                        <input type="submit" name="buy"/>
-                    </form>
-                </div>
-                <div class="order">
-                    <div>
-                        <h3>Sell Limit</h3>
+                    <div class="order">
+                        <div>
+                            <h3>Sell Limit</h3>
+                        </div>
+                        <form action="." method="POST" >
+                            <input type="text" name="price" placeholder="Price" required="">
+                            <input type="text" name="quantity" placeholder="Quantity" required="">
+                            <input type="submit" name="sellLimit"/>
+                        </form>
                     </div>
-                    <form action="." method="POST" >
-                        <input type="text" name="price" placeholder="Price" required="">
-                        <input type="text" name="quantity" placeholder="Quantity" required="">
-                        <input type="submit" name="sellLimit"/>
-                    </form>
-                </div>
-                <div class="order">
-                    <div>
-                        <h3>Sell Market</h3>
+                    <div class="order">
+                        <div>
+                            <h3>Sell Market</h3>
+                        </div>
+                        <form action="." method="POST" >
+                            <input type="text" name="quantity" placeholder="Quantity" required="">
+                            <input type="submit" name="sell"/>
+                        </form>
                     </div>
-                    <form action="." method="POST" >
-                        <input type="text" name="quantity" placeholder="Quantity" required="">
-                        <input type="submit" name="sell"/>
-                    </form>
                 </div>
-            </div>
-            <div class="chart">
-                {% block _chart %}
-                {% include "app/partials/_chart.html" %}
-                {% endblock _chart %}
-            </div>
-            <div class="dom">
-                {% block _dom %}
-                {% include "app/partials/_dom.html" %}
-                {% endblock _dom %}
-            </div>            
-        </div>            
+                <div class="chart">
+                    {% block _chart %}
+                    {% include "app/partials/_chart.html" %}
+                    {% endblock _chart %}
+                </div>
+                <div class="dom">
+                    {% block _dom %}
+                    {% include "app/partials/_dom.html" %}
+                    {% endblock _dom %}
+                </div>            
+            </div>  
+        </div>
+
     </section>
+
+    {% for message in messages %}
+        <p id="messages">{{message}}</p>
+    {% endfor %}
 
     
 
