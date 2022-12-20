@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
-from app.decorators import unauthenticated_user, allowed_users, admin_only
+from app.decorators import unauthenticated_user, allowed_users
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import json
