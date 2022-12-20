@@ -26,7 +26,7 @@ SECRET_KEY = 'j@-(x!6-@ixju6*%3*6pd7se%-3kq$+28&b4zrj89__y2u&(bj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['menobtc.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', 'menobtc.herokuapp.com']
 
 
 # Application definition
