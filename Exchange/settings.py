@@ -25,7 +25,7 @@ SECRET_KEY = 'j@-(x!6-@ixju6*%3*6pd7se%-3kq$+28&b4zrj89__y2u&(bj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost:27017']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,6 +79,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'engine',
+        'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': 'mongodb+srv://Daniele:0qV3reiFSlw0sqFx@engine.w3isvst.mongodb.net/?retryWrites=true&w=majority'
+            }  
     }
 }
 
