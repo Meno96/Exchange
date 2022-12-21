@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 
-# Se l'user è autenticato lo reindirizza alla home sennò continua la funzione
+# If the user is authenticated it will be redirected to the home otherwise continues the function
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -12,7 +12,7 @@ def unauthenticated_user(view_func):
 
     return wrapper_func
 
-# Se l'utente non ha i permessi non viene mostrata la pagina 
+# If the user does not have permissions the page is not shown
 def allowed_users(allowed_roles=[]):
     def decorator(view_func):
         def wrapper_func(request, *args, **kwargs):

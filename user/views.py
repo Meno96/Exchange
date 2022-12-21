@@ -15,6 +15,7 @@ from .forms import NewUserForm
 from app.models import Wallet, Profile
 from app.market import Market
 
+# Register page's view
 @unauthenticated_user
 @csrf_exempt
 def registerPageView(request):
@@ -23,12 +24,9 @@ def registerPageView(request):
 
     form = NewUserForm()
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
         
         form = NewUserForm(request.POST)
         if form.is_valid():
-            print('ok')
             user = form.save()
 
             # Profile creation
@@ -53,6 +51,7 @@ def registerPageView(request):
 
     return render(request, 'user/register.html', {"form": form})
 
+# Login page's view
 @unauthenticated_user
 @csrf_exempt
 def loginPageView(request):
@@ -70,6 +69,7 @@ def loginPageView(request):
 
     return render(request, 'user/login.html', {"loginForm": form})
 
+# Account page's view
 @login_required(login_url='login')
 @csrf_exempt
 def accountPageView(request, id):
@@ -87,7 +87,7 @@ def accountPageView(request, id):
 
     return render(request, 'user/account.html', {'username': username, 'delta': delta})
 
-# View di logout
+# Logout view
 @csrf_exempt
 def logoutUser(request):
     logout(request)

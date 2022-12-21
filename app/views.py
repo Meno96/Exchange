@@ -14,7 +14,6 @@ from .forms import OrderForm, MarketOrderForm
 from .models import Order, Wallet, Profile, IpAddress
 
 # Return actual IP
-
 @csrf_exempt
 def getActualIP(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -32,50 +31,52 @@ def addIp(actualIp):
         ipAddress=actualIp, pubDate=datetime.now())
     ipAddress.save()
 
+# Return the nearest value
 def closestValue(input_list, input_value):
     arr = np.asarray(input_list)
     i = (np.abs(arr - input_value)).argmin()
     return arr[i]
 
+# Homepage's view
 @login_required(login_url='user:login')
 @csrf_exempt
 def homePageView(request):
     data = Market()
     currency = data.updated_data()
 
-     # Memorizza l’ultimo IP che ha avuto accesso alla 
-    # piattaforma per un admin, mostra un messaggio di 
-    # avvertimento quando questo è diverso dal precedente
-    checkIp=None
+    # Stores the last IP that have logged in to the platform as admin, shows a warning message when this is different from the previous one
+    checkIp = None
     if request.user.is_staff:
         dbIp = IpAddress.objects.all().values().last()
         actualIp = getActualIP(request)
-        print(actualIp)
 
         if not dbIp:
             addIp(actualIp)
         else:
             if actualIp != dbIp['ipAddress']:
                 addIp(actualIp)
-                checkIp=True
-    
-        print(checkIp)
+                checkIp = True
 
     return render(request, "homepage.html", {"currency": currency, "checkIp": checkIp})
 
-
+# Exchange page's view
 @login_required(login_url='login')
 @csrf_exempt
 def orderView(request, id):
+
+    # Get actual BTC price $
     data = Market()
     currency = data.updated_data()
 
+    # Get the active limit orders from the db
     buyLimitOrderList = Order.objects.filter(
         status='open', type='buyLimit').order_by('-price')
     sellLimitOrderList = Order.objects.filter(
         status='open', type='sellLimit').order_by('price')
     sellLimitOrderList.reverse()
 
+    # If actual BTC price went over the limit 
+    # order's price automatically close the limit order
     for buyLimitOrder in buyLimitOrderList:
         if buyLimitOrder.price > currency:
             buyLimitOrder.status = 'close'
@@ -86,6 +87,7 @@ def orderView(request, id):
             sellLimitOrder.status = 'close'
             sellLimitOrder.save()
 
+    # Instructions for building the DOM
     domValueSellList = []
     domValueBuyList = []
     domSellList = []
@@ -133,19 +135,18 @@ def orderView(request, id):
         maxQuantity = maxBuyQuantity
 
     for item in domSellList:
-        item.update({'calc':((maxQuantity * 20)/100)})
+        item.update({'calc': ((maxQuantity * 20)/100)})
     for item in domBuyList:
-        item.update({'calc':((maxQuantity * 20)/100)})
+        item.update({'calc': ((maxQuantity * 20)/100)})
 
 
-    if request.user.is_staff == False :
-        wallet = get_object_or_404(Wallet, user_id=id)
-        userProfile = get_object_or_404(Profile, user_id=id)
+    if request.user.is_staff == False:
         if request.method == 'POST':
 
-            # Limit Order
+            # Limit Orders
             if request.POST.get('buyLimit'):
 
+                # Create buy limit order
                 form = OrderForm(request.POST or None)
                 if form.is_valid():
                     status = 'open'
@@ -154,8 +155,10 @@ def orderView(request, id):
                     quantity = form.cleaned_data.get('quantity')
                     profileWallet = Wallet.objects.get(user=request.user)
 
+                    # Manage invalid data
                     if price <= 0.0:
-                        messages.error(request, 'Cannot put a price lower then 0')
+                        messages.error(
+                            request, 'Cannot put a price lower then 0')
                         return redirect('app:order', id=id)
                     if quantity <= 0.0:
                         messages.error(
@@ -169,7 +172,6 @@ def orderView(request, id):
                         messages.error(
                             request, 'Insufficent funds to complete the order')
                         return redirect('app:order', id=id)
-
 
                     newBuyLimitOrder = Order.objects.create(
                         profile=request.user,
@@ -187,6 +189,7 @@ def orderView(request, id):
 
             if request.POST.get('sellLimit'):
 
+                # Create sell limit order
                 form = OrderForm(request.POST or None)
                 if form.is_valid():
                     status = 'open'
@@ -195,8 +198,10 @@ def orderView(request, id):
                     quantity = form.cleaned_data.get('quantity')
                     profileWallet = Wallet.objects.get(user=request.user)
 
+                    # Manage invalid data
                     if price <= 0.0:
-                        messages.error(request, 'Cannot put a price lower then 0')
+                        messages.error(
+                            request, 'Cannot put a price lower then 0')
                         return redirect('app:order', id=id)
                     if quantity <= 0.0:
                         messages.error(
@@ -225,9 +230,10 @@ def orderView(request, id):
 
                 return redirect('app:order', id=id)
 
-            # Market Order
+            # Market Orders
             if request.POST.get('buy'):
 
+                # Create buy order
                 form = MarketOrderForm(request.POST or None)
                 if form.is_valid():
                     status = 'open'
@@ -236,20 +242,23 @@ def orderView(request, id):
                     quantity = form.cleaned_data.get('quantity')
                     profileWallet = Wallet.objects.get(user=request.user)
 
+                    # Manage invalid data
                     if quantity <= 0.0:
                         messages.error(
                             request, 'Cannot put a quantity lower then 0')
                         return redirect('app:order', id=id)
-                    
-                    if price*quantity>profileWallet.usdWallet:
+                    if price*quantity > profileWallet.usdWallet:
                         messages.error(
                             request, 'Insufficent funds to complete the order')
                         return redirect('app:order', id=id)
 
                     # Order matching
                     if sellLimitOrderList.exists():
+
                         quantityTot = 0
                         orderIndex = []
+
+                        # Return only the sell limit orders create from other users
                         for i in range(len(sellLimitOrderList)):
 
                             if sellLimitOrderList[i].profile == profileWallet.user:
@@ -259,11 +268,14 @@ def orderView(request, id):
                             quantityTot += sellLimitOrderList[i].quantity
                             if quantityTot >= quantity:
                                 break
+                        
+                        # Error if there aren't enought sell limit contract, otherwise it continues with the order's matching
                         if quantityTot < quantity:
                             messages.error(
                                 request, f"There are not enough sell orders that match the request.")
-
+                            return redirect('app:order', id=id)
                         else:
+                            # Proceeds with the order's matching if the sell limit order has a price lower than 0.5% of the indicated price
                             if (100-(currency/sellLimitOrderList[i].price*100)) < 0.5:
 
                                 newBuyOrder = Order.objects.create(
@@ -276,16 +288,17 @@ def orderView(request, id):
                                 )
 
                                 messages.info(request,
-                                                f'Order created.')
+                                              f'Order created.')
                                 messages.info(request,
-                                                f'Slippage < 0.5%.')
+                                              f'Slippage < 0.5%.')
                                 messages.info(request,
-                                                f'Start of the bitcoin exchange. ')
+                                              f'Start of the bitcoin exchange. ')
 
+
+                                # Find the best combination of orders to ensure the best price
                                 actualQuantity = newBuyOrder.quantity
                                 actualBTC = profileWallet.btcWallet
                                 for i in orderIndex:
-
                                     sellLimitOrder = Order.objects.get(
                                         _id=sellLimitOrderList[i]._id)
                                     profileSeller = Wallet.objects.get(
@@ -294,16 +307,18 @@ def orderView(request, id):
                                     if actualQuantity > sellLimitOrderList[i].quantity:
                                         profileWallet.btcWallet += sellLimitOrderList[i].quantity
                                         profileWallet.usdWallet -= (sellLimitOrderList[i].price *
-                                                                sellLimitOrderList[i].quantity)
+                                                                    sellLimitOrderList[i].quantity)
 
-                                        profileSeller.usdWallet += sellLimitOrderList[i].price * sellLimitOrderList[i].quantity
+                                        profileSeller.usdWallet += sellLimitOrderList[i].price * \
+                                            sellLimitOrderList[i].quantity
                                         profileSeller.btcWallet -= sellLimitOrderList[i].quantity
                                     else:
                                         profileWallet.btcWallet += actualQuantity
                                         profileWallet.usdWallet -= (sellLimitOrderList[i].price *
-                                                                actualQuantity)
-                                        
-                                        profileSeller.usdWallet += sellLimitOrderList[i].price * actualQuantity
+                                                                    actualQuantity)
+
+                                        profileSeller.usdWallet += sellLimitOrderList[i].price * \
+                                            actualQuantity
                                         profileSeller.btcWallet -= actualQuantity
 
                                     profileWallet.save()
@@ -317,7 +332,7 @@ def orderView(request, id):
                                     sellLimitOrder.save()
 
                                     messages.success(
-                                    request, f'Sell order id: {sellLimitOrderList[i]._id}. || Status: {sellLimitOrderList[i].status}.')
+                                        request, f'Sell order id: {sellLimitOrderList[i]._id}. || Status: {sellLimitOrderList[i].status}.')
                                     if actualQuantity < sellLimitOrderList[i].quantity:
                                         messages.success(
                                             request, f'\nThe User who Sold has Received successfully {sellLimitOrderList[i].price}$ *{actualQuantity} .')
@@ -331,23 +346,28 @@ def orderView(request, id):
                                 newBuyOrder.save()
 
                                 messages.success(request,
-                                                    f'Your Buy order id: {newBuyOrder._id}. || Status: {newBuyOrder.status}.')
+                                                 f'Your Buy order id: {newBuyOrder._id}. || Status: {newBuyOrder.status}.')
                                 messages.success(request,
-                                                    f'\n|| BTC before exchange: {actualBTC}; || BTC after exchange: {profileWallet.btcWallet};')
+                                                 f'\n|| BTC before exchange: {actualBTC}; || BTC after exchange: {profileWallet.btcWallet};')
 
                                 messages.info(
                                     request, f'\nThe bitcoin exchange has been totally executed! Congratulations!')
 
                                 return redirect('app:order', id=id)
                             else:
-                                messages.error(request, 'Order canceled. Slippage > 0.5%. Wait for new sell limit order')
+                                messages.error(
+                                    request, 'Order canceled. Slippage > 0.5%. Wait for new sell limit order')
                                 return redirect('app:order', id=id)
                     else:
-                        messages.error(request, 'Order book too thin. Wait for new sell limit order')
+                        messages.error(
+                            request, 'Order book too thin. Wait for new sell limit order')
                         return redirect('app:order', id=id)
+
+
 
             if request.POST.get('sell'):
 
+                # Create sell order
                 form = MarketOrderForm(request.POST or None)
                 if form.is_valid():
                     status = 'open'
@@ -356,22 +376,25 @@ def orderView(request, id):
                     quantity = form.cleaned_data.get('quantity')
                     profileWallet = Wallet.objects.get(user=request.user)
 
+                    # Manage invalid data
                     if quantity <= 0.0:
                         messages.error(
                             request, 'Cannot put a quantity lower then 0')
                         return redirect('app:order', id=id)
-                    
-                    if quantity>profileWallet.btcWallet:
+                    if quantity > profileWallet.btcWallet:
                         messages.error(
                             request, 'Insufficent BTC to complete the order')
                         return redirect('app:order', id=id)
 
                     # Order matching
                     if buyLimitOrderList.exists():
+
                         quantityTot = 0
                         orderIndex = []
-                        for i in range(len(buyLimitOrderList)):
 
+                        # Return only the buy limit orders create from other users
+                        for i in range(len(buyLimitOrderList)):
+                            
                             if buyLimitOrderList[i].profile == profileWallet.user:
                                 continue
 
@@ -379,12 +402,14 @@ def orderView(request, id):
                             quantityTot += buyLimitOrderList[i].quantity
                             if quantityTot >= quantity:
                                 break
+
+                        # Error if there aren't enought sell limit contract, otherwise it continues with the order's matching
                         if quantityTot < quantity:
                             messages.error(
                                 request, f"There are not enough buy orders that match the request.")
                             return redirect('app:order', id=id)
-
-                        else: 
+                        else:
+                            # Proceeds with the order's matching if the sell limit order has a price lower than 0.5% of the indicated price
                             if (100-(buyLimitOrderList[i].price/currency*100)) < 0.5:
 
                                 newSellOrder = Order.objects.create(
@@ -397,12 +422,14 @@ def orderView(request, id):
                                 )
 
                                 messages.info(request,
-                                                f'Order created.')
+                                              f'Order created.')
                                 messages.info(request,
-                                                f'Slippage < 0.5%.')
+                                              f'Slippage < 0.5%.')
                                 messages.info(request,
-                                                f'Start of the bitcoin exchange. ')
+                                              f'Start of the bitcoin exchange. ')
 
+
+                                # Find the best combination of orders to ensure the best price
                                 actualQuantity = newSellOrder.quantity
                                 actualBTC = profileWallet.btcWallet
                                 for i in orderIndex:
@@ -415,16 +442,18 @@ def orderView(request, id):
                                     if actualQuantity > buyLimitOrderList[i].quantity:
                                         profileWallet.btcWallet -= buyLimitOrderList[i].quantity
                                         profileWallet.usdWallet += (buyLimitOrderList[i].price *
-                                                                buyLimitOrderList[i].quantity)
+                                                                    buyLimitOrderList[i].quantity)
 
-                                        profileBuyer.usdWallet -= buyLimitOrderList[i].price * buyLimitOrderList[i].quantity
+                                        profileBuyer.usdWallet -= buyLimitOrderList[i].price * \
+                                            buyLimitOrderList[i].quantity
                                         profileBuyer.btcWallet += buyLimitOrderList[i].quantity
                                     else:
                                         profileWallet.btcWallet -= actualQuantity
                                         profileWallet.usdWallet += (buyLimitOrderList[i].price *
-                                                                actualQuantity)
-                                        
-                                        profileBuyer.usdWallet -= buyLimitOrderList[i].price * actualQuantity
+                                                                    actualQuantity)
+
+                                        profileBuyer.usdWallet -= buyLimitOrderList[i].price * \
+                                            actualQuantity
                                         profileBuyer.btcWallet += actualQuantity
 
                                     profileWallet.save()
@@ -438,7 +467,7 @@ def orderView(request, id):
                                     buyLimitOrder.save()
 
                                     messages.success(
-                                    request, f'Buy order id: {buyLimitOrderList[i]._id}. || Status: {buyLimitOrderList[i].status}.')
+                                        request, f'Buy order id: {buyLimitOrderList[i]._id}. || Status: {buyLimitOrderList[i].status}.')
                                     if actualQuantity < buyLimitOrderList[i].quantity:
                                         messages.success(
                                             request, f'\nThe User who bought has Received successfully {actualQuantity} BTC.')
@@ -452,19 +481,21 @@ def orderView(request, id):
                                 newSellOrder.save()
 
                                 messages.success(request,
-                                                    f'Your Sell order id: {newSellOrder._id}. || Status: {newSellOrder.status}.')
+                                                 f'Your Sell order id: {newSellOrder._id}. || Status: {newSellOrder.status}.')
                                 messages.success(request,
-                                                    f'\n|| BTC before exchange: {actualBTC}; || BTC after exchange: {profileWallet.btcWallet};')
+                                                 f'\n|| BTC before exchange: {actualBTC}; || BTC after exchange: {profileWallet.btcWallet};')
 
                                 messages.info(
                                     request, f'\nThe bitcoin exchange has been totally executed! Congratulations!')
 
                                 return redirect('app:order', id=id)
                             else:
-                                messages.error(request, 'Order canceled. Slippage > 0.5%. Wait for new buy limit order')
+                                messages.error(
+                                    request, 'Order canceled. Slippage > 0.5%. Wait for new buy limit order')
                                 return redirect('app:order', id=id)
                     else:
-                        messages.error(request, 'Order book too thin. Wait for new buy limit order')
+                        messages.error(
+                            request, 'Order book too thin. Wait for new buy limit order')
                         return redirect('app:order', id=id)
 
     return render(request, 'app/order.html', {

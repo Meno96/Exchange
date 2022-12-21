@@ -3,15 +3,17 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
-# Classe che attribuisce l'IP e la data di accesso
+# Class that attributes IP and login date
 class IpAddress(models.Model):
     pubDate = models.DateTimeField('date published')
     ipAddress = models.GenericIPAddressField()
 
+# Create user profile
 class Profile(models.Model):
     _id = ObjectIdField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+# Create a wallet related to the user with the amount of BTC and USD
 class Wallet(models.Model):
     _id = ObjectIdField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -23,6 +25,7 @@ class Wallet(models.Model):
         text = f"Wallet n. {self._id}. User owner: {self.user}"
         return text
 
+# Create order related to the user
 class Order(models.Model):
     _id = ObjectIdField()
     profile = models.ForeignKey(User, on_delete=models.CASCADE)

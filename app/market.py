@@ -1,6 +1,6 @@
 import requests
 
-
+# Class to get info about BTC from the Coinmarketcap API
 class Market:
     def __init__(self):
         self.url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
@@ -17,6 +17,7 @@ class Market:
         }
 
     def updated_data(self):
-        database = requests.get(url=self.url, headers=self.headers, params=self.params).json()
+        database = requests.get(
+            url=self.url, headers=self.headers, params=self.params).json()
         bitcoin_price = round(database['data'][0]['quote']['USD']['price'], 8)
         return bitcoin_price

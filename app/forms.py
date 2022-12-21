@@ -1,6 +1,6 @@
 from django import forms
 
-
+# Limit orders generation form
 class OrderForm(forms.Form):
     price = forms.FloatField(label='Price ($)')
     quantity = forms.FloatField(label='Quantity')
@@ -15,6 +15,7 @@ class OrderForm(forms.Form):
             raise forms.ValidationError('')  # display messages.error instead
         return cleaned_data
 
+# Market orders generation form
 class MarketOrderForm(forms.Form):
     quantity = forms.FloatField(label='Quantity')
 

@@ -5,8 +5,10 @@ from .models import Wallet, Order, Profile
 class AdminWallet(admin.ModelAdmin):
     list_display = ("user", "_id", "btcWallet", "usdWallet", "startValue")
 
+
 class AdminOrder(admin.ModelAdmin):
     list_display = ("_id", "profile", "created", "status", "type")
+
 
 class AdminProfile(admin.ModelAdmin):
     list_display = ["user", "_id"]
