@@ -15,7 +15,7 @@
         <div class="cardHome">
             <div class="logo">
                 {% load static %}
-                <img src="static/img/logo.png" alt="" width="100px">
+                <img src="{% static '/img/logo.png' %}" alt="" width="100px">
                 <h1 style="margin: 0;">Bitcoin</h1>
             </div>
             <h3>Price: <strong>{{currency|stringformat:".2f"}} $</strong>

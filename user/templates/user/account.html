@@ -17,7 +17,7 @@
                 </label>
                 <input id="file" type="file" onchange="loadFile(event)" />
                 {% load static %}
-                <img src="/static/img/small-profile.jpeg" id="output" width="200" />
+                <img src="{% static '/img/small-profile.jpeg' %}" id="output" width="200" />
             </div>
 
             <div class="info">
