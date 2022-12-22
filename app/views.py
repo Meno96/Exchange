@@ -44,7 +44,8 @@ def homePageView(request):
     data = Market()
     currency = data.updated_data()
 
-    # Stores the last IP that have logged in to the platform as admin, shows a warning message when this is different from the previous one
+    # Stores the last IP that have logged in to the platform as admin, shows a warning 
+    # message when this is different from the previous one
     checkIp = None
     if request.user.is_staff:
         dbIp = IpAddress.objects.all().values().last()

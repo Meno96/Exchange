@@ -10,9 +10,9 @@ class OrderForm(forms.Form):
         price = self.cleaned_data.get('price')
         quantity = self.cleaned_data.get('quantity')
         if price < 0:
-            raise forms.ValidationError('')  # display messages.error instead
+            raise forms.ValidationError('') 
         if quantity < 0:
-            raise forms.ValidationError('')  # display messages.error instead
+            raise forms.ValidationError('')
         return cleaned_data
 
 # Market orders generation form
@@ -23,5 +23,5 @@ class MarketOrderForm(forms.Form):
         cleaned_data = super().clean()
         quantity = self.cleaned_data.get('quantity')
         if quantity < 0:
-            raise forms.ValidationError('')  # display messages.error instead
+            raise forms.ValidationError('')
         return cleaned_data
