@@ -54,7 +54,41 @@ From here the user can access the <strong>Exchange</strong> page by clicking on 
 
 ### Exchange Page
 
+[Exchange Page View](https://github.com/Meno96/Exchange/blob/1bcb1f8b33218fcd282961b621bfe2e905107fb9/app/views.py#L66)
+
 <p align="center">
     <img width="100%" src="./assets/GitHubImage/screen6.png" alt="Homepage">
 </p>
 
+The exchange page consists of:
+
+* on the left there are some forms where it is possible to send limit orders and market orders into the system
+
+* in the center there is the BTC chart provided by TradingView
+
+* on the right there is the DOM (or Order Book), where where it is possible to see all the currently active limit orders.
+
+### Account Page
+
+<p align="center">
+    <img width="100%" src="./assets/GitHubImage/screen7.png" alt="Homepage">
+</p>
+
+The account page gives us information about the total loss or total profit since we created the wallet.
+
+It also gives us information on the balance of the BTC and USD wallet.
+
+## 🏴‍☠️&nbsp; Add ons
+
+There is an implementation to check if the login ip address is always the same or not for the admin user.
+
+## 💭&nbsp; My thoughts
+
+As a trading, crypto and blockchain enthusiast, it was very satisfying and useful to develop this exchange with the with the related order management.
+
+
+## 📫&nbsp; Have a question? Want to chat? 
+
+[LinkedIn](www.linkedin.com/in/daniele-menin)
+
+[Instagram](https://www.instagram.com/danielemeno96/)
