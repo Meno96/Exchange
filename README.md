@@ -86,6 +86,8 @@ It also gives us information on the balance of the BTC and USD wallet.
 
 There is an implementation to check if the login ip address is always the same or not for the admin user.
 
+It was deployed with Heroku and Microsoft Azure was used as cloud for static and media files.
+
 ## 💭&nbsp; My thoughts
 
 As a trading, crypto and blockchain enthusiast, it was very satisfying and useful to develop this exchange with the with the related order management.
