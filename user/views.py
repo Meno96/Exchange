@@ -80,12 +80,20 @@ def accountPageView(request, id):
 
     userWallet = get_object_or_404(Wallet, user_id=id)
 
-    actualValue = userWallet.usdWallet + (userWallet.btcWallet * currency)
+    btcBalance = userWallet.btcWallet
+    usdBalance = userWallet.usdWallet
+
+    actualValue = usdBalance + (btcBalance * currency)
     startValue = userWallet.startValue
     
     delta = actualValue - startValue
 
-    return render(request, 'user/account.html', {'username': username, 'delta': delta})
+    return render(request, 'user/account.html', {
+        'username': username, 
+        'delta': delta,
+        'btcBalance': btcBalance,
+        'usdBalance': usdBalance
+        })
 
 # Logout view
 @csrf_exempt

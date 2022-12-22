@@ -227,6 +227,41 @@ h2 {
   color: #ff9416;
 }
 
+// Account Wallet
+
+.cardWallet {
+  border: 5px solid #ff9416;
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.tableContainer{
+  overflow: hidden;
+  width: 100%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.gridBalance {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.gridBalance th,
+.gridBalance td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 146, 22, 0.3960784314);
+  text-decoration: none;
+  justify-content: center;
+}
+
+.gridBalance th {
+  background-color: rgba(255, 146, 22, 0.3960784314);
+}
 
 
 // Navbar

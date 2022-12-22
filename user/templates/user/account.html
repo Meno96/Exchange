@@ -23,12 +23,49 @@
             <div class="info">
                 <h2>Hello {{username}},</h2>
                 {% if delta >= 0 %}
-                <h3>The value of your portfolio compared to the creation date increased by {{delta|stringformat:".2f"}}$</h3>
+                <p>The value of your portfolio compared to the creation date increased by {{delta|stringformat:".2f"}}$</p>
                 {% else %}
                 <p>The value of your portfolio compared to the creation date decreased by {{delta|stringformat:".2f"}}$ </p>
                 {% endif %}
             </div>
         </div>
+
+        <div class="cardWallet">
+
+            <h2>Wallet</h2>
+
+            <div class="tableContainer">
+                <table class="gridBalance">
+                    
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span><img src="{% static '/img/logoUsd.png' %}" alt="usd logo" width="30px"></span>
+                                <span>USD</span>
+                            </td>
+                            <td>{{ usdBalance }}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><img src="{% static '/img/logo.png' %}" alt="btc logo" width="30px"></span>
+                                <span>BTC</span>
+                            </td>
+                            <td>{{ btcBalance }}</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+
+        </div>
+
     </div>
 </section>
 
