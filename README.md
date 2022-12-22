@@ -24,10 +24,37 @@ The main purpose of this project is to show how to combine Django and MongoDB to
 
 ## 🚀&nbsp; How it's suppose to work?
 
+### Registration Process
+
 When a user registers, a wallet associated with the user is automatically generated, containing a random value between 1 and 10 bitcoins and between 50k and 150k $.
+
+<p align="center">
+    <img width="80%" src="./assets/GitHubImage/screen4.png" alt="Register page">
+</p>
+
+<p align="center">
+    <img width="80%" src="./assets/GitHubImage/screen1.png" alt="Register view">
+</p>
+
+<p align="center">
+    <img width="80%" src="./assets/GitHubImage/screen2.png" alt="Wallet Object">
+</p>
 
 This wallet can be used to simulate BTC trades.
 
+</br>
+
+Once the user is logged in he will be redirected to the homepage, which display some information about BTC
+
 <p align="center">
-    <img width="80%" src="./asset/images/saveTx.png" alt="Send and Save Tx example">
+    <img width="80%" src="./assets/GitHubImage/screen5.png" alt="Homepage">
 </p>
+
+From here the user can access the <strong>Exchange</strong> page by clicking on the appropriate link in the navbar.
+
+### Exchange Page
+
+<p align="center">
+    <img width="100%" src="./assets/GitHubImage/screen6.png" alt="Homepage">
+</p>
+
