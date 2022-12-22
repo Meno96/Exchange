@@ -93,6 +93,6 @@ As a trading, crypto and blockchain enthusiast, it was very satisfying and usefu
 
 ## 📫&nbsp; Have a question? Want to chat? 
 
-[LinkedIn](www.linkedin.com/in/daniele-menin)
+[LinkedIn](https://www.linkedin.com/in/daniele-menin/)
 
 [Instagram](https://www.instagram.com/danielemeno96/)
