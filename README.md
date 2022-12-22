@@ -29,13 +29,13 @@ When a user registers, a wallet associated with the user is automatically genera
 This wallet can be used to simulate BTC trades.
 
 <p align="center">
-    <img width="80%" src="./assets/GitHubImg/screen3.png" alt="Register page">
+    <img width="80%" src="./assets/GitHubImage/screen3.png" alt="Register page">
 </p>
 
 <p align="center">
-    <img width="80%" src="./assets/GitHubImg/screen1.png" alt="Register view">
+    <img width="80%" src="./assets/GitHubImage/screen1.png" alt="Register view">
 </p>
 
 <p align="center">
-    <img width="80%" src="./assets/GitHubImg/screen2.png" alt="Wallet Object">
+    <img width="80%" src="./assets/GitHubImage/screen2.png" alt="Wallet Object">
 </p>
