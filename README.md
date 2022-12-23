@@ -1,5 +1,5 @@
 <h1 align="center">
-    BTC Exchange Project
+    ₿ BTC Exchange Project
 </h1>
 
 <a href="http://menobtc.herokuapp.com/">
