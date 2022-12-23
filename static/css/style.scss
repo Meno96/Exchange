@@ -251,6 +251,10 @@ h2 {
   text-align: left;
 }
 
+.gridBalance tbody tr:hover{
+  background-color: rgba(201, 201, 201, 0.13);
+}
+
 .gridBalance th,
 .gridBalance td {
   padding: 0.75rem;
@@ -290,6 +294,7 @@ h2 {
 
 .navbar a {
   color: white;
+  transition: all .3s ease;
 }
 
 .navbar a:hover {
@@ -364,6 +369,7 @@ h2 {
 
 .cardHome a{
   color: #ff9416;
+  transition: all .3s ease;
 }
 
 .cardHome a:hover {
