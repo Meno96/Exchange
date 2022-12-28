@@ -7,7 +7,7 @@ body {
   margin: 0;
 }
 
-body a{
+body a {
   color: white;
 }
 
@@ -23,9 +23,10 @@ body section {
 
 
 
-body h1{
- margin: 40px 50px 0px 50px;
+body h1 {
+  margin: 40px 50px 0px 50px;
 }
+
 a {
   text-decoration: none;
 }
@@ -56,6 +57,7 @@ a {
   width: 100%;
   font-size: 15px;
   overflow: hidden;
+  cursor: ns-resize;
 }
 
 .sell {
@@ -66,11 +68,15 @@ a {
   border: 1px solid green;
 }
 
+.value{
+  display: flex;
+  align-items: center;
+}
+
 .value p {
   margin: 5px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
-
 }
 
 .value h4 {
@@ -84,11 +90,79 @@ a {
 }
 
 .pContainer {
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
+
+
+// Prova
+
+
+.wrapper {
+  background-color: #fff;
+  color: #444;
+  /* Use flexbox */
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+}
+
+.box1, .box2 {
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 150%;
+  margin-top:2%;
+
+  /* Use box-sizing so that element's outerwidth will match width property */
+  box-sizing: border-box;
+
+  /* Allow box to grow and shrink, and ensure they are all equally sized */
+
+}
+
+
+.box2 {
+  flex: 1;
+}
+
+.handler {
+  width: 20px;
+  height:7px;
+  padding: 0;
+  cursor: ns-resize;
+}
+
+.handler::before {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 100%;
+  background: red;
+  margin: 0 auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -238,7 +312,7 @@ h2 {
   margin-top: 50px;
 }
 
-.tableContainer{
+.tableContainer {
   overflow: hidden;
   width: 100%;
   border-top-left-radius: 15px;
@@ -251,7 +325,7 @@ h2 {
   text-align: left;
 }
 
-.gridBalance tbody tr:hover{
+.gridBalance tbody tr:hover {
   background-color: rgba(201, 201, 201, 0.13);
 }
 
@@ -361,13 +435,13 @@ h2 {
   max-width: 500px;
 }
 
-.homeContainer{
+.homeContainer {
   height: calc(100vh - 120px);
   display: flex;
   align-items: center;
 }
 
-.cardHome a{
+.cardHome a {
   color: #ff9416;
   transition: all .3s ease;
 }
@@ -377,13 +451,13 @@ h2 {
 }
 
 // Login
-.centerScreenSection{
+.centerScreenSection {
   height: calc(100vh - 150px);
   align-items: center;
   justify-content: center;
 }
 
-.cardCenter{
+.cardCenter {
   border: 5px solid #ff9416;
   border-radius: 10px;
   padding: 10px;
@@ -391,20 +465,20 @@ h2 {
   flex-direction: column;
 }
 
-.errorlist{
+.errorlist {
   display: none;
 }
 
-.centerScreenSection label{
+.centerScreenSection label {
   margin: 10px 10px 0px 10px;
 }
 
-.centerScreenSection input{
+.centerScreenSection input {
   margin: 10px;
   padding: 5px;
 }
 
 // Register
-.helptext{
+.helptext {
   display: none;
 }

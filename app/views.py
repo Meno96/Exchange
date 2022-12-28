@@ -88,59 +88,6 @@ def orderView(request, id):
             sellLimitOrder.status = 'close'
             sellLimitOrder.save()
 
-    # Instructions for building the DOM
-    domValueSellList = []
-    domValueBuyList = []
-    domSellList = []
-    domBuyList = []
-
-    for i in range(1, 11):
-        increment = 10
-        if i == 1:
-            domValueSellList.append(currency+increment)
-            domValueBuyList.append(currency-increment)
-            domSellList.append({'value': currency+increment, 'quantity': 0})
-            domBuyList.append({'value': currency-increment, 'quantity': 0})
-        else:
-            domValueSellList.append(domValueSellList[i-2]+increment)
-            domValueBuyList.append(domValueBuyList[i-2]-increment)
-            domSellList.append(
-                {'value': domSellList[i-2]['value']+increment, 'quantity': 0})
-            domBuyList.append(
-                {'value': domBuyList[i-2]['value']-increment, 'quantity': 0})
-
-    for buyLimitOrder in buyLimitOrderList:
-        if buyLimitOrder.price >= domValueBuyList[len(domValueBuyList)-1] and buyLimitOrder.price <= domValueBuyList[0]:
-            closestNum = closestValue(domValueBuyList, buyLimitOrder.price)
-            for item in domBuyList:
-                if item['value'] == closestNum:
-                    item['quantity'] += buyLimitOrder.quantity
-
-    for sellLimitOrder in sellLimitOrderList:
-        if sellLimitOrder.price >= domValueSellList[0] and sellLimitOrder.price <= domValueSellList[len(domValueSellList)-1]:
-            closestNum = closestValue(domValueSellList, sellLimitOrder.price)
-            for item in domSellList:
-                if item['value'] == closestNum:
-                    item['quantity'] += sellLimitOrder.quantity
-
-    domSellList.reverse()
-
-    maxSellQuantity = sorted(domSellList, key=lambda i: i['quantity'])[
-        len(domSellList)-1]['quantity']
-    maxBuyQuantity = sorted(domBuyList, key=lambda i: i['quantity'])[
-        len(domSellList)-1]['quantity']
-
-    if maxSellQuantity > maxBuyQuantity:
-        maxQuantity = maxSellQuantity
-    else:
-        maxQuantity = maxBuyQuantity
-
-    for item in domSellList:
-        item.update({'calc': ((maxQuantity * 20)/100)})
-    for item in domBuyList:
-        item.update({'calc': ((maxQuantity * 20)/100)})
-
-
     if request.user.is_staff == False:
         if request.method == 'POST':
 
@@ -503,7 +450,4 @@ def orderView(request, id):
         'currency': currency,
         'buyLimitOrderList': buyLimitOrderList,
         'sellLimitOrderList': sellLimitOrderList,
-        'domSellList': domSellList,
-        'domBuyList': domBuyList,
-        'maxQuantity': maxQuantity,
     })

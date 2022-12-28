@@ -55,6 +55,7 @@ a {
   width: 100%;
   font-size: 15px;
   overflow: hidden;
+  cursor: ns-resize;
 }
 
 .sell {
@@ -63,6 +64,11 @@ a {
 
 .buy {
   border: 1px solid green;
+}
+
+.value {
+  display: flex;
+  align-items: center;
 }
 
 .value p {
@@ -82,10 +88,52 @@ a {
 }
 
 .pContainer {
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.wrapper {
+  background-color: #fff;
+  color: #444;
+  /* Use flexbox */
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+}
+
+.box1, .box2 {
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 150%;
+  margin-top: 2%;
+  /* Use box-sizing so that element's outerwidth will match width property */
+  box-sizing: border-box;
+  /* Allow box to grow and shrink, and ensure they are all equally sized */
+}
+
+.box2 {
+  flex: 1;
+}
+
+.handler {
+  width: 20px;
+  height: 7px;
+  padding: 0;
+  cursor: ns-resize;
+}
+
+.handler::before {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 100%;
+  background: red;
+  margin: 0 auto;
 }
 
 .ordersGrid {

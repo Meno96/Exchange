@@ -57,19 +57,331 @@
                     {% endblock _chart %}
                 </div>
                 <div class="dom">
-                    {% block _dom %}
-                    {% include "app/partials/_dom.html" %}
-                    {% endblock _dom %}
+                    
                 </div>            
             </div>  
         </div>
 
+
+
     </section>
+
+    <!-- {% block _dom %}
+                    {% include "app/partials/_dom.html" %}
+                    {% endblock _dom %} -->
+
+    <script>
+
+        // Return the nearest value
+        function closestValue(inputList, inputValue){
+            let arr = Array.from(inputList)
+            let arr2 = []
+            for(let k = 0; k < arr.length; k++) {
+                arr2.push(Math.abs(arr[k] - inputValue));
+            }
+            let min = (Math.min.apply(Math, arr2))
+            let i = arr2.indexOf(min)
+            return arr[i]
+        }
+
+        // Return the nearest multiple
+        function roundMult(num, multiple) {
+            return Math.round(num/multiple)*multiple;
+        }
+
+
+        // Instructions for building the DOM
+        let currency = {{ currency }}
+        let dom = document.querySelector('.dom');
+        // DOM increment value
+        let displayIncr = [10, 5, 2.5, 1, 0.5]
+        // How many boxes display
+        let numVis = [30, 30, 50, 100, 200]
+        let domValueSellList = []
+        let domValueBuyList = []
+        let domSellList = []
+        let domBuyList = []
+        
+        
+        // Create array with values
+        for (let j=0; j<displayIncr.length; j++){
+            let increment = displayIncr[j]
+            domValueSellList[j] = []
+            domValueBuyList[j] = []
+            domSellList[j] = []
+            domBuyList[j] = []
+            for(let i=0; i<numVis[j]; i++){
+                if (i == 0){
+                    domValueSellList[j].push(roundMult((currency+increment), increment))
+                    domValueBuyList[j].push(roundMult((currency-increment), increment))
+                    domSellList[j].push({'value': roundMult((currency+increment), increment), 'quantity': 0})
+                    domBuyList[j].push({'value': roundMult((currency-increment), increment), 'quantity': 0})
+                }else{
+                    domValueSellList[j].push(domValueSellList[j][i-1]+increment)
+                    domValueBuyList[j].push(domValueBuyList[j][i-1]-increment)
+                    domSellList[j].push(
+                        {'value': domSellList[j][i-1]['value']+increment, 'quantity': 0})
+                    domBuyList[j].push(
+                        {'value': domBuyList[j][i-1]['value']-increment, 'quantity': 0})
+                }
+            }
+
+            // Set quantity over a DOM value
+            {% for buyLimitOrder in buyLimitOrderList %}
+            if ({{ buyLimitOrder.price }} >= domValueBuyList[j][domValueBuyList[j].length-1] && {{ buyLimitOrder.price }} <= domValueBuyList[j][0]){
+                let closestNum = closestValue(domValueBuyList[j], {{ buyLimitOrder.price }})
+                for (let i=0; i<domBuyList[j].length; i++){
+                    if (domBuyList[j][i].value == closestNum){
+                            domBuyList[j][i].quantity += {{ buyLimitOrder.quantity }}
+                        }
+                    }
+    
+                }
+            {% endfor %}
+    
+            {% for sellLimitOrder in sellLimitOrderList %}
+                if ({{ sellLimitOrder.price }} >= domValueSellList[j][0] && {{ sellLimitOrder.price }} <= domValueSellList[j][domValueSellList[j].length-1]){
+                    let closestNum = closestValue(domValueSellList[j], {{ sellLimitOrder.price }})
+                    for (let i=0; i<domSellList[j].length; i++){
+                        if (domSellList[j][i].value == closestNum){
+                            domSellList[j][i].quantity += {{ sellLimitOrder.quantity }}
+                        }
+                    }
+    
+                }
+            {% endfor %}
+            
+            domSellList[j].reverse()
+
+            // Set max quantity
+            let maxSellQuantity = (Math.max.apply(Math, domSellList[j].map(function(o) {return o.quantity; })))
+            let maxBuyQuantity = (Math.max.apply(Math, domBuyList[j].map(function(o) {return o.quantity; })))
+    
+            if (maxSellQuantity > maxBuyQuantity){
+                maxQuantity = maxSellQuantity
+            }else{
+                maxQuantity = maxBuyQuantity
+            }
+
+        }
+
+        // Function to draw the DOM
+        function drawDom(increment, zoomIn){
+            let calc = ((maxQuantity * 25)/100)
+
+            // Sell Limit
+            for (let i=0; i<domSellList[increment].length; i++){
+                if (domSellList[increment][i].quantity >= calc && maxQuantity > 0){
+                    var box = document.createElement('div');
+                    dom.appendChild(box)
+                    box.setAttribute("class", "value sell")
+                    box.setAttribute("id", domSellList[increment][i].value%100)
+                    let percent = 98 * (domSellList[increment][i].quantity / maxQuantity)
+                    box.style.width = percent + '%'
+                    box.style.minWidth = "65px"
+
+                    if (zoomIn == true) {
+                        box.style.height = "25px"
+                    }else{
+                        box.style.height = "46px"
+                    }
+
+                    var pCont = document.createElement('div');
+                    box.appendChild(pCont)
+                    pCont.setAttribute("class", "pContainer")
+                    
+                    var quantity = document.createElement('p')
+                    var value = document.createElement('h4')
+                    pCont.appendChild(quantity)
+                    pCont.appendChild(value)
+                    quantity.setAttribute('class', 'pQuantity')
+                    value.setAttribute('class', 'h4Value')
+                    quantity.textContent = domSellList[increment][i].quantity.toFixed(2)
+                    value.textContent = domSellList[increment][i].value.toFixed(1)
+                }else{
+                    var box = document.createElement('div');
+                    dom.appendChild(box)
+                    box.setAttribute("class", "value sell")
+                    box.setAttribute("id", domSellList[increment][i].value%100)
+                    box.style.width = '65px';
+
+                    if (zoomIn == true) {
+                        box.style.height = "25px"
+                    }else{
+                        box.style.height = "46px"
+                    }
+
+                    var pCont = document.createElement('div');
+                    box.appendChild(pCont)
+                    pCont.setAttribute("class", "pContainer")
+
+                    var value = document.createElement('h4')
+                    pCont.appendChild(value)
+                    value.setAttribute('class', 'h4Value')
+                    value.textContent = domSellList[increment][i].value.toFixed(1)
+                }
+            }
+
+            // Actual price
+            const actualPriceDiv = document.createElement('div');
+            dom.appendChild(actualPriceDiv)
+
+            actualPriceDiv.setAttribute("class", "actual value")
+
+            const actualPriceH4 = document.createElement('h4')
+            actualPriceDiv.appendChild(actualPriceH4)
+            actualPriceH4.textContent = currency.toFixed(1)
+
+            // Buy Limit
+            for (let i=0; i<domBuyList[increment].length; i++){
+                if (domBuyList[increment][i].quantity >= calc && maxQuantity > 0){
+                    var box = document.createElement('div');
+                    dom.appendChild(box)
+                    box.setAttribute("class", "value buy")
+                    box.setAttribute("id", domBuyList[increment][i].value%100)
+                    let percent = 98 * (domBuyList[increment][i].quantity / maxQuantity)
+                    box.style.width = percent + '%'
+                    box.style.minWidth = "65px"
+                    if (zoomIn == true) {
+                        box.style.height = "25px"
+                    }else{
+                        box.style.height = "46px"
+                    }
+
+                    var pCont = document.createElement('div');
+                    box.appendChild(pCont)
+                    pCont.setAttribute("class", "pContainer")
+                    
+                    var quantity = document.createElement('p')
+                    var value = document.createElement('h4')
+                    pCont.appendChild(quantity)
+                    pCont.appendChild(value)
+                    quantity.setAttribute('class', 'pQuantity')
+                    value.setAttribute('class', 'h4Value')
+                    quantity.textContent = domBuyList[increment][i].quantity.toFixed(2)
+                    value.textContent = domBuyList[increment][i].value.toFixed(1)
+                }else{
+                    var box = document.createElement('div');
+                    dom.appendChild(box)
+                    box.setAttribute("class", "value buy")
+                    box.setAttribute("id", (domBuyList[increment][i].value%100))
+                    box.style.width = '65px';
+                    if (zoomIn == true) {
+                        box.style.height = "25px"
+                    }else{
+                        box.style.height = "46px"
+                    }
+
+                    var pCont = document.createElement('div');
+                    box.appendChild(pCont)
+                    pCont.setAttribute("class", "pContainer")
+
+                    var value = document.createElement('h4')
+                    pCont.appendChild(value)
+                    value.setAttribute('class', 'h4Value')
+                    value.textContent = domBuyList[increment][i].value.toFixed(1)
+                }
+
+            }
+
+            let el = document.querySelector(".value")
+            let boxes = document.getElementsByClassName('value');
+            
+            return {el, boxes}
+            
+        }
+        
+        // Initial setup
+        const startValue = 1
+        let values = drawDom(startValue, true)
+        el = values.el
+        boxes = values.boxes
+        
+        // Even listener when mouse move, shrink the DOM boxes
+        dom.addEventListener('mousedown', mousedown);
+        function mousedown(e) {
+
+            e.preventDefault();
+
+            let prevY = e.clientY
+
+            window.addEventListener('mousemove', mousemove);
+            window.addEventListener('mouseup', mouseup);
+
+            function mousemove(e) {
+
+                let boxesHeight = (el.getBoundingClientRect()).height;
+                const sensibility = 5
+
+                if ((prevY-e.clientY)>sensibility){
+                    boxesHeight = boxesHeight - 1 + 'px'
+                    for(let i=0;i<boxes.length;i++){
+                        boxes[i].style.height = boxesHeight;
+                    }
+                    prevY=e.clientY
+                }else if ((prevY-e.clientY)<-sensibility) {
+                    boxesHeight = boxesHeight - 3 + 'px'
+                    for(let i=0;i<boxes.length;i++){
+                        boxes[i].style.height = boxesHeight;
+                    }
+                    prevY=e.clientY
+                }
+            }
+
+            function mouseup() {
+                window.removeEventListener('mousemove', mousemove);
+                window.removeEventListener('mouseup', mouseup);
+            }
+        };
+        
+
+        // Observer when boxes change height
+        j=startValue
+
+        const observer = new ResizeObserver(function() {
+            let boxesHeight = (el.getBoundingClientRect()).height;
+
+            // When boxes height > 51 add boxes
+            if (j!=4){
+                if (boxesHeight>51){
+
+                    dom.innerHTML = '';
+                    
+                    if (j<displayIncr.length-1){
+                        j++
+                    }
+                    let zoomIn = true
+                    values = drawDom(j, zoomIn)
+                    el = values.el
+                    boxes = values.boxes
+                    
+                    observer.observe(el);
+                }
+            }
+            // When boxes height < 25 remove boxes
+            if (j!=0){
+                if (boxesHeight<25){
+
+                    dom.innerHTML = '';
+
+                    if (j>0){
+                        j--
+                    }
+                    let zoomIn = false
+                    values = drawDom(j, zoomIn)
+                    el = values.el
+                    boxes = values.boxes
+                    
+                    observer.observe(el);
+                }
+            }
+        });
+        observer.observe(el);
+
+    </script>
 
     {% for message in messages %}
         <p id="messages">{{message}}</p>
     {% endfor %}
-
-    
 
 {% endblock %}
