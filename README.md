@@ -12,6 +12,7 @@ The main purpose of this project is to show how to combine Django and MongoDB to
 
 ## 🛠️&nbsp; How to run
 - Have MongoDB installed
+
 - Clone the repo
 - Create and activate virtual enviroment
 - Install requirements: --> 
@@ -30,11 +31,6 @@ The main purpose of this project is to show how to combine Django and MongoDB to
     python manage.py runserver
     ```
 - Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser
-- Log in with the following credentials to access all features: 
-
-    Username: `admin`
-    
-    password: `admin`
 
 ## 🗎&nbsp; Requirements
 
