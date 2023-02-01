@@ -11,6 +11,7 @@ The main purpose of this project is to show how to combine Django and MongoDB to
 <hr/>
 
 ## 🛠️&nbsp; How to run
+- Have MongoDB installed
 - Clone the repo
 - Create and activate virtual enviroment
 - Install requirements: --> 
@@ -91,7 +92,7 @@ The exchange page consists of:
 
 * in the center there is the BTC chart provided by TradingView
 
-* on the right there is the DOM (or Order Book), where where it is possible to see all the currently active limit orders.
+* on the right there is the DOM (or Order Book) where it is possible to see all the currently active limit orders. It is shrinkable and stretchable so all price levels are visible to see if there are any orders.
 
 ### Account Page
 
@@ -107,11 +108,9 @@ It also gives us information on the balance of the BTC and USD wallet.
 
 There is an implementation to check if the login ip address is always the same or not for the admin user.
 
-It was deployed with Heroku and Microsoft Azure was used as cloud for static and media files.
-
 ## 💭&nbsp; My thoughts
 
-As a trading, crypto and blockchain enthusiast, it was very satisfying and useful to develop this exchange with the with the related order management.
+As a trading, crypto and blockchain enthusiast, it was very satisfying and useful to develop this exchange with the related order management.
 
 
 ## 📫&nbsp; Have a question? Want to chat? 
