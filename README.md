@@ -2,10 +2,6 @@
     ₿ BTC Exchange Project
 </h1>
 
-<a href="http://menobtc.herokuapp.com/">
-    <strong><p align="center">Website Link</p></strong>
-</a>
-
 <br/>
 
 This project is a BTC Exchange where you can simulate trades with BTC (no real BTC are used).
@@ -13,6 +9,31 @@ This project is a BTC Exchange where you can simulate trades with BTC (no real B
 The main purpose of this project is to show how to combine Django and MongoDB to make a powerful platform that manage all the orders.
 
 <hr/>
+
+## 🛠️&nbsp; How to run
+- Clone the repo
+- Create and activate virtual enviroment
+- Install requirements: --> 
+    ```
+    pip install -r requirements.txt
+    ```
+- Make database migrations: --> 
+    ```
+    python manage.py makemigrations
+    ``` 
+    ```
+    python manage.py migrate
+    ```
+- Run server: --> 
+    ```
+    python manage.py runserver
+    ```
+- Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser
+- Log in with the following credentials to access all features: 
+
+    Username: `admin`
+    
+    password: `admin`
 
 ## 🗎&nbsp; Requirements
 
