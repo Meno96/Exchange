@@ -24,9 +24,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'j@-(x!6-@ixju6*%3*6pd7se%-3kq$+28&b4zrj89__y2u&(bj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'menobtc.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'menobtc.herokuapp.com']
 
 
 # Application definition
@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'engine',
         'ENFORCE_SCHEMA': False,
             'CLIENT': {
-                'host': 'mongodb+srv://Daniele:0qV3reiFSlw0sqFx@engine.w3isvst.mongodb.net/?retryWrites=true&w=majority'
+                'host': 'mongodb://localhost:27017/'
             }  
     }
 }
@@ -134,13 +134,15 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-DEFAULT_FILE_STORAGE = 'backend.custom_azure.AzureMediaStorage'
-STATICFILES_STORAGE = 'backend.custom_azure.AzureStaticStorage'
+# AZURE STATIC FILES
 
-STATIC_LOCATION = "static"
-MEDIA_LOCATION = "media"
+# DEFAULT_FILE_STORAGE = 'backend.custom_azure.AzureMediaStorage'
+# STATICFILES_STORAGE = 'backend.custom_azure.AzureStaticStorage'
 
-AZURE_ACCOUNT_NAME = "djangostoragest"
-AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
-MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+# STATIC_LOCATION = "static"
+# MEDIA_LOCATION = "media"
+
+# AZURE_ACCOUNT_NAME = "djangostoragest"
+# AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+# STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+# MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
