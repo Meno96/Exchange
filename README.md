@@ -9,7 +9,7 @@ This project is a BTC Exchange where you can simulate trades with BTC (no real B
 The main purpose of this project is to show how to combine Django and MongoDB to make a powerful platform that manage all the orders.
 
 <hr/>
-
+ 
 ## 🛠️&nbsp; How to run
 - Have MongoDB installed
 
